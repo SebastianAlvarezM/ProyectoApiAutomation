@@ -1,0 +1,72 @@
+plugins {
+    id 'java'
+    id "net.serenity-bdd.serenity-gradle-plugin" version "3.6.7" // This allows you to view serenity reports
+}
+
+defaultTasks 'clean', 'test', 'aggregate' // The command helps clear the old report to rerun and generate the new report.
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //                 DEPENDENCIES FOR AUTOMATION API
+    //                 DEPENDENCIES FOR junit
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api It helps to execute the tests by means of labels.
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.9.3'
+
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine this is execution for junit api.
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.3'
+
+    //                 DEPENDENCIES FOR cucumber
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-java
+    implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.12.0'
+
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.12.0'
+
+    // https://mvnrepository.com/artifact/io.cucumber/cucumber-junit-platform-engine
+    testImplementation group: 'io.cucumber', name: 'cucumber-junit-platform-engine', version: '7.12.0'
+
+    //                 DEPENDENCIES FOR serenity
+    // https://mvnrepository.com/artifact/net.serenity-bdd/serenity-cucumber
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-cucumber', version: '3.7.1'
+
+    // https://mvnrepository.com/artifact/net.serenity-bdd/serenity-junit5
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit5', version: '3.7.1'
+
+    // https://mvnrepository.com/artifact/net.serenity-bdd/serenity-screenplay-rest  This allows the methods and classes to use the api services.
+    implementation group: 'net.serenity-bdd', name: 'serenity-screenplay-rest', version: '3.7.1'
+
+    // https://mvnrepository.com/artifact/net.serenity-bdd/serenity-core
+    implementation group: 'net.serenity-bdd', name: 'serenity-core', version: '3.7.1'
+
+    // https://mvnrepository.com/artifact/com.github.javafaker/javafaker
+    implementation group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
+
+    /*
+    Note: The difference between implementation and testImplementation is:
+    When we use testImplementation it is that it is only used in the test package.
+    But when the dependency starts in implementation it can be used in the main and test package.
+    It is not highly recommended, because is bad practice to use test dependencies in main package and by machine resource
+     */
+
+}
+
+test {
+    testLogging.showStandardStreams = true  // Shows in console everything more detailed
+    systemProperties System.getProperties() // Get all the environment variables from my machine.
+}
+
+// gradle.startParameter.continueOnFailure = true // It is for when a test fails the test does not stop and continues its process. We are not going to use it for now.
+test.finalizedBy(aggregate)
+
+/*
+Note: To fix a project you go to gradle.
+tasks/build/clean
+You click the hammer (build project)
+tasks/build/build
+*/
